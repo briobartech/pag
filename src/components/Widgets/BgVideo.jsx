@@ -9,7 +9,7 @@ function BgVideo({ video }) {
     <BgVideoStyled>
       <video
         key={video}
-        onLoadedData={context.handleVideoLoaded}
+        
         autoPlay
         loop
         muted
