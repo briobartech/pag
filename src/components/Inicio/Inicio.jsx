@@ -5,15 +5,17 @@ import styled from "styled-components";
 import BgVideo from "../Widgets/BgVideo.jsx";
 import video from "/video2.mp4";
 import CursorRevealImage from "../Widgets/RevealOnLayer.jsx";
+import ScrollZoomPage from "../Widgets/BgImage.jsx";
 
 function Inicio() {
   const context = useContext(AppContext);
   //startBtn
   return (
     <InicioStyled $valueBtn={useContext(AppContext).valueBtn}>
-      <div className="cursor-reveal-image">
-        <CursorRevealImage />
-        <BgVideo video={video} />
+      <div className="">
+        {/* <CursorRevealImage />
+        <BgVideo video={video} /> */}
+        <ScrollZoomPage />
       </div>
 
       <div className="inicio">

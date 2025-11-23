@@ -4,30 +4,29 @@ import IconPage from "./components/Widgets/IconPage.jsx";
 import { SideProgressNav } from "./components/Widgets/SideProgressBar.jsx";
 import AboutMeSection from "./components/AboutMe/AboutMeSection.jsx";
 import ProcessSection from "./components/Process/ProcessSection.jsx";
-
-
+import { useContext } from "react";
+import { AppContext } from "./components/context/AppContext.jsx";
 
 function App() {
+  console.log(useContext(AppContext).currentViewIndex)
   
-
   return (
     <div className="pagina-completa">
       <IconPage />
-     
+      
       <SideProgressNav />
-
 
       <section id="inicio" className="inicio">
         <Inicio />
       </section>
-      
-      <section id="quienes-somos" className="quienes-somos">
-        <AboutMeSection/>
+
+      {/* <section id="quienes-somos" className="quienes-somos">
+        
+        <AboutMeSection />
       </section>
       <section id="proceso">
-        <ProcessSection/>
-      </section>
-      
+        <ProcessSection />
+      </section> */}
     </div>
   );
 }

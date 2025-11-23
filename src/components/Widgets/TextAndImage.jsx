@@ -11,8 +11,6 @@ function TextAndImage({ props }) {
 
 export default TextAndImage;
 const TextAndImageStyled = styled.div`
-  
-
   .text-content {
     font-family: ${textTheme.calSans};
     font-size: 1.2rem;
