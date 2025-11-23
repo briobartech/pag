@@ -1,0 +1,17 @@
+/* src/components/CursorRevealImage/CursorRevealImage.css */
+
+.cursor-reveal-image-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 50; 
+  
+  /* CLAVE: La transición debe estar aquí para que el cambio de opacity sea suave */
+transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);  
+  /* Ya no necesitamos 'opacity: 0' fijo aquí, el JSX lo controlará. */
+  /* Asegura que la posición sea relativa si quieres centrar el mouse */
+  position: absolute; 
+}
+
