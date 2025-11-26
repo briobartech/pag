@@ -1,7 +1,6 @@
-import { createContext, useState, useEffect } from "react";
-import miVideo from "/ajo-montaje.mp4";
-import miVideo2 from "/video2.mp4";
-import { useScrollDirection } from "../utils/useScrollDirection";
+import React,{ createContext, useState, useRef,useMemo } from "react";
+
+import { SECTIONS_CONFIG, SECTION_KEYS } from '../../config/sectionsConfig';
 
 export const AppContext = createContext();
 
@@ -9,52 +8,83 @@ export function AppContextProvider(props) {
   const [startBtn, setStartBtn] = useState(true);
   const [valueBtn, setValueBtn] = useState(1);
   const [valueVideo, setValueVideo] = useState(0);
-
-  const [currentViewIndex, setCurrentViewIndex] = useState(0);
-  const { direction } = useScrollDirection();
-  
-
- const VIEW_POINTS = [
-  // 0. INICIO (Vista Completa - FRENTE / PARTE MÁS BAJA)
-  // Aquí la imagen se muestra en su escala 1x, anclada a la parte inferior.
-  { id: 'inicio', label: 'Inicio', scale: 1.8, x: 10, y: -60 },
-  
-  // 1. LAGO
-  // Zoom ligero/moderado. Pan ligeramente a la derecha (el lago está un poco a la derecha)
-  // y subir un poco para compensar el object-position: bottom.
-  { id: 'lago', label: 'El Lago', scale: 1.8, x: -35, y: -35  }, // x negativo para mover la imagen a la izquierda (centrar punto derecho) 1.5, x: -10, y: -20
-  
-  // 2. CIUDAD DE FONDO
-  // Zoom más fuerte. Pan a la izquierda (la ciudad está a la izquierda) y subir más.
-  { id: 'ciudad', label: 'La Ciudad', scale:2, x: 15, y: -8}, // x positivo para mover la imagen a la derecha (centrar punto izquierdo)
-  
-  // 3. CIELO
-  // Zoom aún más fuerte (o moderado, dependiendo del efecto deseado).
-  // Pan horizontal a cero (centrado), y subir MUCHO para alcanzar el cielo.
-  { id: 'cielo', label: 'El Cielo', scale: 2, x: -35, y: 15}, // y muy negativo para subir la imagen drásticamente scale: 1.8, x: 0, y: -60
-];
-  // Usamos useEffect para reaccionar a la dirección de la rueda
-  useEffect(() => {
-    if (direction === "down") {
-      setCurrentViewIndex((prevIndex) =>
-        Math.min(prevIndex + 1, VIEW_POINTS.length - 1)
-      );
-    } else if (direction === "up") {
-      setCurrentViewIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+  const [activeSectionKey, setActiveSectionKey] = useState(SECTION_KEYS[0]);
+  const bgVideoRef = useRef(null);
+  const endedListenerRef = useRef(null);
+  const playBgVideoOnce = () => {
+    const video = bgVideoRef.current;
+    if (!video) {
+      console.warn("bgVideoRef no está conectado aún");
+      return;
     }
-  }, [direction]);
 
-  // El ID del punto de vista activo
-  const activeViewId = VIEW_POINTS[currentViewIndex];
+    // Asegurarse que no esté en loop mientras lo reproducimos una vez
+    const previousLoop = video.loop;
+    video.loop = false;
 
+    // limpiar listener anterior si lo hubiera
+    if (endedListenerRef.current) {
+      video.removeEventListener("ended", endedListenerRef.current);
+      endedListenerRef.current = null;
+    }
+
+    const onEnded = () => {
+      console.log("Bg video finished (ended) — deteniendo reproducción.");
+      try {
+        video.pause();
+      } catch (e) {
+        /* noop */
+      }
+      // restaurar el loop original si lo necesitas:
+      video.loop = previousLoop;
+      // limpiar listener
+      video.removeEventListener("ended", onEnded);
+      endedListenerRef.current = null;
+    };
+
+    endedListenerRef.current = onEnded;
+    video.addEventListener("ended", onEnded);
+
+    video.play().catch((err) => {
+      console.error("Error al reproducir bg video", err);
+      // restaurar loop si fallo
+      video.loop = previousLoop;
+    });
+  };
+  const stopBgVideo = () => {
+    const video = bgVideoRef.current;
+    if (!video) return;
+    if (endedListenerRef.current) {
+      video.removeEventListener("ended", endedListenerRef.current);
+      endedListenerRef.current = null;
+      
+    }
+    video.pause();
+  };
   const startApp = () => {
     setStartBtn(false);
-    console.log(currentViewIndex);
+    playBgVideoOnce();
+
     setTimeout(() => {
       setValueVideo(1);
       setValueBtn(0);
-    }, 2000);
+      setActiveSectionKey(1)
+    }, 4000);
   };
+
+const setSection = (key) => {
+    if (SECTION_KEYS.includes(key)) {
+      setActiveSectionKey(key);
+    } else {
+      console.warn(`Sección '${key}' no encontrada.`);
+    }
+  };
+
+  const contextValue = useMemo(() => ({
+    activeSectionKey,setSection,
+    activeSectionData: SECTIONS_CONFIG[activeSectionKey],
+    sectionsConfig: SECTIONS_CONFIG,
+  }), [activeSectionKey]);
 
   return (
     <AppContext.Provider
@@ -65,8 +95,10 @@ export function AppContextProvider(props) {
         setValueBtn,
         startBtn,
         startApp,
-        direction,
-        activeViewId,currentViewIndex
+        bgVideoRef,
+        playBgVideoOnce,
+        stopBgVideo,
+        activeSectionKey,setActiveSectionKey
       }}
     >
       {props.children}
