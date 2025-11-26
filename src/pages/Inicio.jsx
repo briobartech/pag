@@ -5,14 +5,19 @@ import styled from "styled-components";
 import BgVideo from "../components/Widgets/BgVideo.jsx";
 import video from "/intro2.mp4";
 
+
 function Inicio() {
   const context = useContext(AppContext);
-  //startBtn
+  const handleAnimationComplete = () => {
+    console.log("Animation completed!");
+  };
+
+
   return (
     <InicioStyled $valueBtn={useContext(AppContext).valueBtn}>
+      <TextAndImage />
       <div className="">
         <BgVideo video={video} />
-        {/* <ScrollZoomPage /> */}
       </div>
 
       <div className="inicio">
@@ -31,15 +36,15 @@ function Inicio() {
             className="welcome-msg"
             style={{
               opacity: context.startBtn ? "0" : "1",
-              display: context.valueBtn === 0 ? "none" : "block",
+              display: context.hideBtnStart === true ? "block" : "none",
             }}
           >
             <BlurText
               text="BIENVENIDO"
-              delay={350}
+              delay={400}
               animateBy="words"
               direction="top"
-              onAnimationComplete={() => console.log("Animation completed!")}
+              onAnimationComplete={handleAnimationComplete}
               className="text-2xl mb-8"
             />
           </div>
@@ -52,13 +57,79 @@ function Inicio() {
 export default Inicio;
 
 const InicioStyled = styled.div`
+  .text-2xl {
+    font-size: 3em;
+    ¡Claro!
+      Aquí
+      tienes
+      una
+      configuración
+      CSS
+      básica
+      pero
+      elegante
+      para
+      el
+      estilo
+      de
+      un
+      texto
+      de
+      tipo
+      título
+      (<h1>, <h2>, etc.).
+      Esta
+      configuración
+      se
+      centra
+      en
+      una
+      tipografía
+      legible,
+    un
+      espaciado
+      cómodo
+      y
+      un
+      toque
+      sutil
+      de
+      estilo.
+      🎨
+      Estilos
+      CSS
+      para
+      un
+      Título
+      Elegante
+      CSS
+      h1 {
+      /* 1. Tipografía y Tamaño */
+      font-family: "Georgia", serif; /* Una fuente clásica y elegante */
+      font-size: 2.5em; /* Un tamaño destacado para un h1 */
+      font-weight: 700; /* Negrita definida, pero no demasiado pesada */
 
+      /* 2. Color */
+      color: #2c3e50; /* Un color oscuro y profundo (azul marino/gris oscuro) */
+
+      /* 3. Espaciado y Alineación */
+      margin-top: 0.5em; /* Espacio superior */
+      margin-bottom: 0.75em; /* Espacio inferior para separar del contenido */
+      padding-bottom: 0.1em; /* Un poco de padding abajo para el subraya */
+      text-align: left; /* Alineación común y limpia */
+
+      /* 4. Efecto Sutil (Opcional) */
+      border-bottom: 2px solid #3498db; /* Una línea inferior sutil de color azul */
+      letter-spacing: -0.02em; /* Un ligero ajuste entre letras para refinar el aspecto */
+      line-height: 1.2; /* Altura de línea para mejor legibilidad */
+    }
   }
   .welcome-msg {
     opacity: 1;
     z-index: 100;
-    position:relative;
-    top:0;
+    position: absolute;
+    top: 50%;
+    left: 40%;
     transition: opacity 1s ease-in-out;
   }
   .contenido-superpuesto {

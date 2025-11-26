@@ -33,7 +33,7 @@ console.log(activeSectionKey)
         variants={pageVariants}
         initial="initial"
         animate="in"
-        exit="out"
+        
         transition={{ duration: 0.7 }} // Duración de la transición
         className={`page-wrapper page-${activeSectionKey}`}
       >

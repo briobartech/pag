@@ -1,6 +1,6 @@
-import React,{ createContext, useState, useRef,useMemo } from "react";
+import React, { createContext, useState, useRef, useMemo } from "react";
 
-import { SECTIONS_CONFIG, SECTION_KEYS } from '../../config/sectionsConfig';
+import { SECTIONS_CONFIG, SECTION_KEYS } from "../../config/sectionsConfig";
 
 export const AppContext = createContext();
 
@@ -8,6 +8,7 @@ export function AppContextProvider(props) {
   const [startBtn, setStartBtn] = useState(true);
   const [valueBtn, setValueBtn] = useState(1);
   const [valueVideo, setValueVideo] = useState(0);
+  const [hideBtnStart, setHideBtnStart] = useState(false);
   const [activeSectionKey, setActiveSectionKey] = useState(SECTION_KEYS[0]);
   const bgVideoRef = useRef(null);
   const endedListenerRef = useRef(null);
@@ -57,22 +58,25 @@ export function AppContextProvider(props) {
     if (endedListenerRef.current) {
       video.removeEventListener("ended", endedListenerRef.current);
       endedListenerRef.current = null;
-      
     }
     video.pause();
   };
   const startApp = () => {
     setStartBtn(false);
+    setTimeout(() => {
+      setHideBtnStart(true);
+      
+    },1500);
     playBgVideoOnce();
 
     setTimeout(() => {
       setValueVideo(1);
       setValueBtn(0);
-      setActiveSectionKey(1)
+      setActiveSectionKey(1);
     }, 4000);
   };
 
-const setSection = (key) => {
+  const setSection = (key) => {
     if (SECTION_KEYS.includes(key)) {
       setActiveSectionKey(key);
     } else {
@@ -80,11 +84,15 @@ const setSection = (key) => {
     }
   };
 
-  const contextValue = useMemo(() => ({
-    activeSectionKey,setSection,
-    activeSectionData: SECTIONS_CONFIG[activeSectionKey],
-    sectionsConfig: SECTIONS_CONFIG,
-  }), [activeSectionKey]);
+  const contextValue = useMemo(
+    () => ({
+      activeSectionKey,
+      setSection,
+      activeSectionData: SECTIONS_CONFIG[activeSectionKey],
+      sectionsConfig: SECTIONS_CONFIG,
+    }),
+    [activeSectionKey]
+  );
 
   return (
     <AppContext.Provider
@@ -98,7 +106,8 @@ const setSection = (key) => {
         bgVideoRef,
         playBgVideoOnce,
         stopBgVideo,
-        activeSectionKey,setActiveSectionKey
+        activeSectionKey,
+        setActiveSectionKey,hideBtnStart
       }}
     >
       {props.children}
