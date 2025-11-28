@@ -3,7 +3,7 @@ import BgVideo from "../components/Widgets/BgVideo.jsx";
 import video from "/about-us-bg.mp4";
 import maskarade from "/mask.png";
 import Reproductor from "../components/utils/MusicPlayer.jsx";
-import musicSource from '/about-us.wav'
+import musicSource from '/about-us.ogg'
 function AboutMeSection(params) {
   // 2. Datos para el carrusel (en tu caso, años)
 
@@ -12,7 +12,7 @@ function AboutMeSection(params) {
       <BgVideo video={video} autoplay={false} />
 
       <MaskWrapper imageSrc={maskarade} />
-      <Reproductor/> 
+      <Reproductor musicSource={musicSource}/> 
     </AboutMeSectionStyled>
   );
 }

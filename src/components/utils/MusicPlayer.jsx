@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactHowler from 'react-howler';
 
-const Reproductor = ({ playOnLastPage }) => {
+const Reproductor = ({ playOnLastPage,musicSource }) => {
     const [isPlaying, setIsPlaying] = useState(true);
   
     React.useEffect(() => {
@@ -12,7 +12,7 @@ const Reproductor = ({ playOnLastPage }) => {
   
     return (
       <div>
-        <ReactHowler src="/about-us.wav" playing={isPlaying} volume={1} />
+        <ReactHowler src={musicSource} playing={isPlaying} volume={1} />
         
       </div>
     );
