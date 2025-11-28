@@ -11,7 +11,7 @@ function BgVideo({ video,autoplay}) {
         key={video}
         ref={context.bgVideoRef}
         autoPlay={autoplay}
-        muted
+        
         className="bg-video"
         style={{ opacity: !context.valueVideo }} // Opacidad: 1 (visible) o 0 (invisible)
       >

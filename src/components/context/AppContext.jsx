@@ -1,6 +1,6 @@
 import React, { createContext, useState, useRef, useMemo } from "react";
-
 import { SECTIONS_CONFIG, SECTION_KEYS } from "../../config/sectionsConfig";
+import { LANGUAGES } from "../../config/LanguajeSelector.js";
 
 export const AppContext = createContext();
 
@@ -12,6 +12,16 @@ export function AppContextProvider(props) {
   const [activeSectionKey, setActiveSectionKey] = useState(SECTION_KEYS[0]);
   const bgVideoRef = useRef(null);
   const endedListenerRef = useRef(null);
+  const [isMuted, setIsMuted] = useState(true);
+
+  // Lenguaje seleccionado global
+  const [lang, setLang] = useState(LANGUAGES[0]);
+
+  // Función para alternar el estado de silencio al hacer clic en el botón
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+  };
+
   const playBgVideoOnce = () => {
     const video = bgVideoRef.current;
     if (!video) {
@@ -62,16 +72,18 @@ export function AppContextProvider(props) {
     video.pause();
   };
   const startApp = () => {
+    toggleMute();
     setStartBtn(false);
     setTimeout(() => {
       setHideBtnStart(true);
-      
-    },1500);
+    }, 1500);
     playBgVideoOnce();
-
+    setTimeout(() => {
+      setValueBtn(0);
+    }, 2000);
     setTimeout(() => {
       setValueVideo(1);
-      setValueBtn(0);
+
       setActiveSectionKey(1);
     }, 4000);
   };
@@ -90,8 +102,10 @@ export function AppContextProvider(props) {
       setSection,
       activeSectionData: SECTIONS_CONFIG[activeSectionKey],
       sectionsConfig: SECTIONS_CONFIG,
+      lang,
+      setLang,
     }),
-    [activeSectionKey]
+    [activeSectionKey, lang]
   );
 
   return (
@@ -107,7 +121,12 @@ export function AppContextProvider(props) {
         playBgVideoOnce,
         stopBgVideo,
         activeSectionKey,
-        setActiveSectionKey,hideBtnStart
+        setActiveSectionKey,
+        hideBtnStart,
+        toggleMute,
+        isMuted,
+        lang,
+        setLang,
       }}
     >
       {props.children}

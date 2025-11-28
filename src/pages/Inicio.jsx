@@ -3,19 +3,18 @@ import { AppContext } from "../components/context/AppContext.jsx";
 import BlurText from "../components/Widgets/BlurText.jsx";
 import styled from "styled-components";
 import BgVideo from "../components/Widgets/BgVideo.jsx";
-import video from "/intro2.mp4";
-
-
+import video from "/intro.mp4";
+import LanguageSelector from "../components/Widgets/VerticalCarrousel.jsx";
+import { welcomeLang,startTourLang } from "../components/utils/content.js";
 function Inicio() {
   const context = useContext(AppContext);
   const handleAnimationComplete = () => {
     console.log("Animation completed!");
   };
 
-
   return (
     <InicioStyled $valueBtn={useContext(AppContext).valueBtn}>
-      <TextAndImage />
+     
       <div className="">
         <BgVideo video={video} />
       </div>
@@ -28,19 +27,20 @@ function Inicio() {
               onClick={context.startApp}
               type="button"
             >
-              Iniciar recorrido
+              {startTourLang[context.lang.code] || "Start Tour"}
             </button>
+            <LanguageSelector/>
           </div>
         ) : (
           <div
             className="welcome-msg"
             style={{
-              opacity: context.startBtn ? "0" : "1",
+              opacity: context.valueBtn === 0 ? "0" : "1",
               display: context.hideBtnStart === true ? "block" : "none",
             }}
           >
             <BlurText
-              text="BIENVENIDO"
+              text={welcomeLang[context.lang.code] || "WELCOME"}
               delay={400}
               animateBy="words"
               direction="top"
@@ -58,72 +58,31 @@ export default Inicio;
 
 const InicioStyled = styled.div`
   .text-2xl {
-    font-size: 3em;
-    ¡Claro!
-      Aquí
-      tienes
-      una
-      configuración
-      CSS
-      básica
-      pero
-      elegante
-      para
-      el
-      estilo
-      de
-      un
-      texto
-      de
-      tipo
-      título
-      (<h1>, <h2>, etc.).
-      Esta
-      configuración
-      se
-      centra
-      en
-      una
-      tipografía
-      legible,
-    un
-      espaciado
-      cómodo
-      y
-      un
-      toque
-      sutil
-      de
-      estilo.
-      🎨
-      Estilos
-      CSS
-      para
-      un
-      Título
-      Elegante
-      CSS
-      h1 {
-      /* 1. Tipografía y Tamaño */
-      font-family: "Georgia", serif; /* Una fuente clásica y elegante */
-      font-size: 2.5em; /* Un tamaño destacado para un h1 */
-      font-weight: 700; /* Negrita definida, pero no demasiado pesada */
-
-      /* 2. Color */
-      color: #2c3e50; /* Un color oscuro y profundo (azul marino/gris oscuro) */
-
-      /* 3. Espaciado y Alineación */
-      margin-top: 0.5em; /* Espacio superior */
-      margin-bottom: 0.75em; /* Espacio inferior para separar del contenido */
-      padding-bottom: 0.1em; /* Un poco de padding abajo para el subraya */
-      text-align: left; /* Alineación común y limpia */
-
-      /* 4. Efecto Sutil (Opcional) */
-      border-bottom: 2px solid #3498db; /* Una línea inferior sutil de color azul */
-      letter-spacing: -0.02em; /* Un ligero ajuste entre letras para refinar el aspecto */
-      line-height: 1.2; /* Altura de línea para mejor legibilidad */
-    }
+    font-size: 5em;
+    font-family: "Cal Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: white;
+    text-shadow: 2px 2px 4px #333;
   }
+
+  h1 {
+    /* 1. Tipografía y Tamaño */
+    font-family: "Georgia", serif;
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #2c3e50;
+
+    margin-top: 0.5em;
+    margin-bottom: 0.75em;
+    padding-bottom: 0.1em;
+    text-align: left;
+
+    border-bottom: 2px solid #3498db;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
   .welcome-msg {
     opacity: 1;
     z-index: 100;
@@ -133,12 +92,16 @@ const InicioStyled = styled.div`
     transition: opacity 1s ease-in-out;
   }
   .contenido-superpuesto {
-    width: 100%;
+    width: 55%;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: space-between;
+    align-items: start;
+    
     position: absolute;
-    top: 50%;
+    top: 40%;
+    right: 0;
   }
   .btn-start {
     width: 150px;
@@ -147,12 +110,13 @@ const InicioStyled = styled.div`
     border: 2px solid rgba(255, 255, 255, 0);
     border-radius: 50%;
     color: white;
-    font-size: 24px;
+    font-size: 1.2em;
     font-family: "Alumni Sans Pinstripe", sans-serif;
     font-weight: 400;
     font-style: normal;
     transition: border-color 0.5s ease-in-out, border-width 0.5s ease-in-out;
     position: relative;
+    
     z-index: 100;
   }
   .btn-start:hover {

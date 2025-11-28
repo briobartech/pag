@@ -1,20 +1,18 @@
-
 import styled from "styled-components";
 import BgVideo from "../components/Widgets/BgVideo.jsx";
 import video from "/about-us-bg.mp4";
 import maskarade from "/mask.png";
-
+import Reproductor from "../components/utils/MusicPlayer.jsx";
+import musicSource from '/about-us.wav'
 function AboutMeSection(params) {
- 
-
   // 2. Datos para el carrusel (en tu caso, años)
-  
+
   return (
     <AboutMeSectionStyled>
-      
       <BgVideo video={video} autoplay={false} />
 
       <MaskWrapper imageSrc={maskarade} />
+      <Reproductor/> 
     </AboutMeSectionStyled>
   );
 }

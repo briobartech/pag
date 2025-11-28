@@ -8,9 +8,9 @@ import ContactoPage from "../pages/ContactSection";
 import { SECTIONS_CONFIG } from "../config/sectionsConfig";
 
 const pageVariants = {
-  initial: { opacity: 0, x: 50 }, // Estado inicial
-  in: { opacity: 1, x: 0 },       // Estado final (entró)
-  out: { opacity: 0, x: -50 }      // Estado de salida
+  initial: { opacity: 0 },
+  in: { opacity: 1 },
+  out: { opacity: 0 }
 };
 const COMPONENTS_MAP = {
   inicio: InicioPage,
@@ -26,16 +26,16 @@ console.log(activeSectionKey)
     COMPONENTS_MAP[SECTIONS_CONFIG[activeSectionKey]] || (() => <div>Página no encontrada</div>);
 
   return (
-    <AnimatePresence mode="wait"> {/* 'wait' asegura que un componente salga antes de que el siguiente entre */}
-      {/* La clave aquí es el activeSectionKey, que fuerza la re-renderización */}
+    <AnimatePresence mode="wait">
       <motion.div
-        key={activeSectionKey} 
+        key={activeSectionKey}
         variants={pageVariants}
         initial="initial"
         animate="in"
-        
-        transition={{ duration: 0.7 }} // Duración de la transición
+        exit="out"
+        transition={{ duration: 0.6, ease: "easeOut" }}
         className={`page-wrapper page-${activeSectionKey}`}
+        style={{ willChange: "opacity" }}
       >
         <ComponentToRender />
       </motion.div>
